@@ -1,0 +1,526 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/head.png">
+  <link rel="icon" href="/img/head.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2e8b57">
+  
+    <meta name="description" content="">
+  
+  <meta name="author" content="David Pan">
+  <meta name="keywords" content="">
+  
+  <title>双目立体视觉 - David-ustc&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"david-ustc.github.io","root":"/","version":"1.8.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":false,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>David Pan's blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/background.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="双目立体视觉">
+              
+                双目立体视觉
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-02-26 19:55" pubdate>
+        2021年2月26日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      9
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">双目立体视觉</h1>
+            
+            <div class="markdown-body">
+              <h2 id="双目立体视觉———《人工智能导论之computer-vision》实验报告"><a href="#双目立体视觉———《人工智能导论之computer-vision》实验报告" class="headerlink" title="双目立体视觉———《人工智能导论之computer vision》实验报告"></a>双目立体视觉———《人工智能导论之computer vision》实验报告</h2><h4 id="实验题目"><a href="#实验题目" class="headerlink" title="实验题目"></a>实验题目</h4><p>在middlebury数据集上实现双目立体视觉图像重建<br><img src="/img/stereo/exp_stereo.png" width = "380" style="align:center;" /></p>
+<h4 id="实验目的"><a href="#实验目的" class="headerlink" title="实验目的"></a>实验目的</h4><ol>
+<li><strong>了解计算机视觉基本知识。</strong></li>
+<li><strong>学习计算机数字图像处理基本概念。</strong></li>
+<li><strong>双目视觉图像重建算法的学习与实践。</strong></li>
+</ol>
+<h4 id="实验原理"><a href="#实验原理" class="headerlink" title="实验原理"></a>实验原理</h4><ol>
+<li><p><strong>双目立体视觉图像</strong><br>大体步骤有：双目标定 $\Rightarrow$ 立体校正（含消除畸变）$\Rightarrow$ 立体匹配 $\Rightarrow$ 视差计算 $\Rightarrow$ 深度/3D坐标计算<br>第三、四步包括：<br>(1)必须从一幅图像中选出位于场景中一个表面上的某一特定位置；<br>(2)必须在另一幅图像中鉴别出同一个位置；<br>(3)测出这两个对应像点之间的视差。在一组重复摄影的两张照片上(立体模式)，同一地物的影象，沿着摄影基线(摄影地点和下一个摄影地点之间的飞行方向线)方向位置变换，这个变化量叫<strong>立体视差</strong>。</p>
+<br /></li>
+<li><p><strong>双目标定</strong><br>双目标定的目标是获得左右两个相机的内参、外参和畸变系数，其中内参包括左右相机的fx，fy，cx，cy，外参包括左相机相对于右相机的旋转矩阵和平移向量，畸变系数包括径向畸变系数（k1， k2，k3）和切向畸变系数（p1，p2）。实验采用的<code>middlebury</code>数据集，包含校正效果已经很好的图像和参数表：<br><code>Here is a sample calib.txt file for one of the full-size training image pairs:</code><br><code>cam0=[3997.684 0 1176.728; 0 3997.684 1011.728; 0 0 1]</code><br><code>cam1=[3997.684 0 1307.839; 0 3997.684 1011.728; 0 0 1]</code><br><code>doffs=131.111</code><br><code>baseline=193.001</code><br><code>width=2964</code><br><code>height=1988</code><br><code>ndisp=280</code><br><code>isint=0</code><br><code>vmin=31</code><br><code>vmax=257</code><br><code>dyavg=0.918</code><br><code>dymax=1.516</code></p>
+<br /></li>
+<li><p> <strong>极线校正</strong><br>立体校正的目的是将拍摄于同一场景的左右两个视图进行数学上的投影变换，使得两个成像平面平行于基线，且同一个点在左右两幅图中位于同一行，简称共面行对准。只有达到共面行对准以后才可以应用三角原理计算距离。<br>如下图所示：</p>
+<img src="/img/stereo/exp_align.png" width = "400" height="234"  style="align:center;" />
+<br /></li>
+<li><p><strong>立体匹配与视差图计算</strong><br>假设两幅图像经过了校正，那么对应点的寻找限制在图像的同一行上。一旦找到对应点，由于深度是和偏移成正比的，那么深度（Z坐标）可以直接由水平偏移来计算，<br>其中，$f$是经过校正图像的焦距，$b$(baseline)是两个照相机中心之间的距离，$x_l,x_r$是左右两幅图像中对应点的横坐标，$x_l - x_r = disparity$为视差。<br>根据上图可以得到相似三角形：$\Delta_{p_l, p, p_r}  \sim  \Delta_{O_l, p, O_r}$<br>以及对应的性质：<br>$$\frac{b+ x_l - x_r}{b} = \frac{Z-f}{Z}$$<br>计算公式在校正后必要时加上修正，即$d = x_l - x_r +doffs=x_l-x_r+cx_0-cx_1$。</p>
+<br /></li>
+</ol>
+<blockquote>
+<p>双目视觉的重点在于匹配算法，接下来介绍几种基础的普通计算方法，并选取部分实践评估。常用的立体匹配方法基本上可以分为两类：局部方法例如<code>BM、SGM</code>等，非局部的，即全局方法例如<code>Dynamic Programming</code>、<code>Graph Cut</code>等。局部方法计算量小，匹配质量相对较低，全局方法省略了代价聚合而采用了优化能量函数的方法，匹配质量较高，但是计算量也比较大。目前<code>OpenCV</code>中已经实现的方法有<code>BM</code>、<code>binaryBM</code>、<code>SGBM</code>这几种方法。<br>此外在立体匹配生成视差图之后，还可以对视差图进行滤波后处理，例如<code>Guided Filter</code>、<code>Bilatera Filter</code>等。 视差图滤波能够将稀疏视差转变为稠密视差，并在一定程度上降低视差图噪声，改善视差图的视觉效果，但是比较依赖初始视差图的质量。<br><br /></p>
+</blockquote>
+<ol start="5">
+<li><p><strong>匹配像素算法———归一化互相关(NCC:Normalized cross-correlation)</strong><br>在立体重建算法中，我们将对于每个像素尝试不同的偏移，并按照局部图像周围归一化的互相关值，选择具有最佳评估结果的视差。因为每个偏移在某种程度上对应于一个平面，所以该过程有时称为扫平面法。<br>如有校正过的两帧图像，NCC算法对图像$I_1$一个待匹配像素构建$n*n$匹配窗口，在图像$I_2$极线上对每一个像素构建匹配窗口与待匹配像素匹配窗口计算相关性，相关性最高的视为最优匹配。由于NCC匹配流程是通过在同一行查找最优匹配，因此可以并行处理，对于运行效率有一定的提升。<br>我们使用每个像素周围的图像块（根本上说，是局部周边图像）来计算归一化的互相关。针对图像周围像素NCC公式：<br>$$ncc(I_1, I_2) =\frac{\sum_{x}(I_1(x) -\mu_1)(I_2(x)- \mu_2)}{\sqrt{\sum_{x}(I_1(x) -\mu_1)^2 \sum_{x}(I_2(x)- \mu_2)^2}}$$</p>
+</li>
+<li><p><strong>匹配像素算法————SGBM算法</strong><br>(1).预处理<br>SGBM采用水平<code>Sobel</code>算子，把图像做处理，公式为：<br>$Sobel ,(x,y)=2[P(x+1,y)-P(x-1,y)]+ P(x+1,y-1)-P(x-1,y-1)+ P(x+1,y+1)-P(x-1,y+1)$<br>用一个函数将经过水平<code>Sobel</code>算子处理后的图像上每个像素点（P表示其像素值）映射成一个新的图像：<code>P_new</code>表示新图像上的像素值，<code>prefiltercap</code>作为传递参数可定义。<br>$$P_{new} =<br>   \begin{cases}</p>
+<pre><code>\qquad\qquad 0 \qquad\qquad p &lt;\text&#123;-prefiltercap&#125;;\\
+p+prefiltercap \qquad \text&#123;-prefiltercap&#125;\leq p \leq \text&#123;-prefiltercap&#125;;\\
+ 2*prefiltercap,\quad\quad p &gt;\text&#123;-prefiltercap&#125;.
+\end&#123;cases&#125;
+</code></pre>
+<p>$$<br>预处理实际上是得到图像的梯度信息,经预处理的图像保存起来，将会用于计算代价。<br>(2).代价计算<br>大部分匹配算法中就是在校正图像上的每一行，寻找一条使得全局能量函数最小的最优匹配路径。在论文中，作者提出了一个具体的能量函数：$$L(D) = \sum_p [C(p,D_p) +\sum_{q\in N_p}p_1\cdot I(|D_p -D_q|=1)+\sum_{q\in N_p}p_2 I(|D_p -D_q|&gt;1)$$<br>opencv中两个参数P1，P2是这样设定的：<br><code>P1 =8*cn*sgbm.SADWindowSize*sgbm.SADWindowSize</code>;<br><code>P2 = 32*cn*sgbm.SADWindowSize*sgbm.SADWindowSize</code>。<br>Np 指像素p的相邻像素点；C(p, Dp)指当前像素点<code>disparity</code>为Dp时的<code>cost</code>函数值，<strong>可以为BT代价或者MI代价等</strong>，<code>SGBM</code>中能量函数一般定义为C(original)和C(smooth)之和，其中 C(data)为图像数据项用于判断匹配像素点之间的相似性，C(smooth)为<code>sobel</code>预处理之后像素点与邻域像素的平滑约束项，用于保证视差的连续性；<br>P1 是一个惩罚系数，它适用于像素p相邻像素中<code>disparity</code>值与p的<code>disparity</code>值相差1的那些像素；P2 是一个惩罚系数，它适用于像素p相邻像素中<code>disparity</code>值与p的<code>disparity</code>值相差大于1的那些像素；$I[]$示性函数如果函数中的参数为真返回1，否则返回0。<br>按照上述过程，只要依次求解每个阶段的最优值$min L_k()$，该行像素的视差也就求出来了。从这个过程中可以发现，该计算流程实际上就是接下来所要讲解的<code>SGM</code>在水平方向上的聚合。<br>(3).代价聚合和动态规划<br>动态规划即在水平扫描线的视差空间切面上寻找最优路径，如下图所示，以像素点的行方向为横坐标，视差值d 为纵坐标，依次将整个过程分为 1、2、3、…、k 共k个阶段。将上述各个阶段所处的匹配阶段用不同的状态表示。如下图所示，每一个阶段的状态就是对应像素点的匹配情况，共有三种状态：相互匹配记为 M、左可见右遮挡为 L、右可见左遮挡为 R，状态的选择满足无后效性。<img src="/img/stereo/exp_DP.png" width = "380" height="234"  style="align:center;" /><br>针对该思想，Hirschmuller提出了semi-global matching方法，通过在多个方向1维路径上平等地进行代价聚合，然后使用WTA求解视差，来作为一个近似求解2维能量最小化的过程。<strong>此时能量（损失）函数化简成：</strong><br>$$ L(r,d) = C(\bold{p},d) +min(L_r(\bold{p-r},d),L_r(\bold{p-r},d-1)+P_1,L_r(\bold{p-r},d+1)+P_1,min_iL_r(\bold{p-r},i)+P_2)-min_kL_r(\bold{p-r},k)$$<br>代价聚合的路径可以为8或16个，这样可以全面覆盖整张图像，最终的聚合代价是所有路径上聚合代价的和：$S(\bold{p},d) = \sum_r L_r(\bold{r},d)$<br>(4).视差计算<br>经过代价聚合后，根据<code>winner takes all</code>的思想，取最大值$d^* = argmin S(\bold{p},d)$得到视差图，即可进一步得到深度图。<br>(5).后处理<code>proprocessing</code>，这里只选取两步骤简要介绍。<br>A.唯一性检测<br>采用比率测试匹配筛选方法，即最低代价是次低代价的<code>(1+ uniquenessRatio/100)</code>倍的时候时，最低代价匹配的视差值才认为是正确视差值，否则这个像素点的视差值设定为负值。其中<code>uniquenessRatio</code>是一个常数参数，一般设置为0.8左右。<br>B.左右一致性检测<br> 设左图中像素p的视差为d，右图中对应像素的视差为d<em>，那么一般认为时，$|d-d^</em>|&lt;threshold$才最有可能为正确的视差，否则将其置为一个无效值。threshold一般取为1或者2。函数<code>cv2.stereoSGBM_create()</code>代码中已经介绍过该参数。</p>
+</li>
+</ol>
+<h4 id="算法结构"><a href="#算法结构" class="headerlink" title="算法结构"></a>算法结构</h4><ol>
+<li>ncc算法有两种处理方法，分别是采用平均滤波器和高斯滤波器计算归一化互相关系数ncc。两者除了<code>filter</code>不同，在算法上无差异，流程如下：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs sql">def plane_sweep_ncc(im_l,im_r,<span class="hljs-keyword">start</span>,steps,wid):<br>    mean_l <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(im_l)<br>    mean_r <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(im_r)<br>    norm_l <span class="hljs-operator">=</span> im_l <span class="hljs-operator">-</span> mean_l<br>    norm_r <span class="hljs-operator">=</span> im_r <span class="hljs-operator">-</span> mean_r<br>    <span class="hljs-keyword">for</span> displ <span class="hljs-keyword">in</span> <span class="hljs-keyword">range</span>(steps):<br>        s <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(norm_l.roll(<span class="hljs-operator">-</span>displ <span class="hljs-operator">-</span> <span class="hljs-keyword">start</span>) <span class="hljs-operator">*</span> norm_r)  <br>        s_l <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(norm_l.roll(<span class="hljs-operator">-</span>displ <span class="hljs-operator">-</span> <span class="hljs-keyword">start</span>) <span class="hljs-operator">*</span> norm_l.roll(<span class="hljs-operator">-</span>displ <span class="hljs-operator">-</span> <span class="hljs-keyword">start</span>))<br>        s_r <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(norm_r <span class="hljs-operator">*</span> norm_r) <br>        dmaps[:, :, displ] <span class="hljs-operator">=</span> s <span class="hljs-operator">/</span> <span class="hljs-built_in">sqrt</span>((s_l <span class="hljs-operator">*</span> s_r)<span class="hljs-operator">+</span><span class="hljs-number">1e-5</span>)<br>    #选取最佳深度<br>    <span class="hljs-keyword">return</span> disparity <span class="hljs-operator">=</span> dmaps.argmax(, axis<span class="hljs-operator">=</span><span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure></li>
+<li>Python语言程序包opencv（cv2）有与C++的接口，内部定义了SGBM对象，可直接操作。<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs routeros">import cv2<br>stereo = cv2.StereoSGBM_create(<br>    #最小视差，默认为0。此参数决定左图中的像素点在右图匹配搜索的起点。<br>    <span class="hljs-attribute">minDisparity</span>=0,<br>    <span class="hljs-attribute">numDisparities</span>=256,  # max_disp has <span class="hljs-keyword">to</span> be dividable by 16 f. E. HH 192, 256<br>    <span class="hljs-attribute">blockSize</span>=3,<br>    #控制视差变化平滑性的参数。P1越大，视差越平滑，P2越大，边缘越差。windowsize默认3; 5; 7 ; 本实验设置为3<br>    <span class="hljs-attribute">P1</span>=8 * 3 * window_size ** 2,<br>    <span class="hljs-attribute">P2</span>=32 * 3 * window_size ** 2,<br>    #一致性<br>    <span class="hljs-attribute">disp12MaxDiff</span>=1,<br>    #唯一性<br>    <span class="hljs-attribute">uniquenessRatio</span>=15,<br>    #视差连通区域像素点个数的大小。对于每一个视差点，当其连通区域的像素点个数小于size时，认为该视差值无效，是噪点。<br>    <span class="hljs-attribute">speckleWindowSize</span>=0,<br>    <span class="hljs-attribute">speckleRange</span>=2,<br>    #水平sobel预处理后，映射滤波器大小。默认为15<br>    <span class="hljs-attribute">preFilterCap</span>=63,<br>    <span class="hljs-attribute">mode</span>=cv2.STEREO_SGBM_MODE_SGBM_3WAY<br>)<br>    disparity = stereo.compute(img_left, img_right).astype(np.float32)<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h4><ol>
+<li><p><code>middlebury</code>数据集提供了真实视差图图pfm文件，通过文件IO操作将字节序稍作变换，即可得到png图片。视差图作为数组读入后，运用一步公式和<code>calib.txt</code>标定文件参数，计算可得深度图。本小节全部以<code>Umbrella-perfect</code>为分析对象，视差图和深度图真值如下：</p>
+<table><tbody><tr>
+<td align="center"><div><img src="/img/stereo/disp0-gt.png" width="100%"></div></td>
+<td align="center"><div><img src="/img/stereo/dep0-gt.png" width="100%"></div></td>
+</tr></tbody></table></li>
+<li><p><code>ncc</code>算法提出时期较早，效果不如新算法好，主要通过调节<code>wid</code>参数实现最佳匹配。<code>wid</code>越大，图像越平滑，但细节信息更少，<code>wid</code>越小，噪声越多，缺乏稳健性。下图分别是平均滤波器（wid=9）和高斯滤波器(wid=3)的视差图，可以明显看出物体轮廓不清晰。</p>
+<table><tbody><tr>
+<td align="center"><div><img src="/img/stereo/disp0-ncc.png" width="80%"></div></td>
+<td align="center"><div><img src="/img/stereo/disp0-ncc2.png" width="80%"></div></td>
+</tr></tbody></table></li>
+<li><p>OpenCV的SGBM算法出彩之处在于后处理，受噪音、图像轮廓等因素影响小，从而成为主流的立体视觉匹配算法。实验成图和数据集真值图对比如下，虽然仍有差距，但是视觉上的匹配效果差强人意。</p>
+</li>
+</ol>
+<table><tr><td align="center">
+<div><img src="/img/stereo/disp0-gt.png" width="100%" />&#x771F;&#x503C;&#x89C6;&#x5DEE;</div></td><td align="center">
+<div><img src="/img/stereo/disp0-sgbm.png" width="100%" />SGBM&#x89C6;&#x5DEE;</div></td>
+</tr><tr><td align="center">
+<div><img src="/img/stereo/dep0-gt.png" width="100%"/>&#x771F;&#x503C;&#x6DF1;&#x5EA6;</div></td><td align="center">
+<div><img src="/img/stereo/dep0-sgbm.png" width="100%"/>SGBM&#x6DF1;&#x5EA6;</div></td>
+</tr></table>
+
+<blockquote>
+<p>参考文献：<br>[1]vision.middlebury.edu/stereo/data/2014<br>[2]Hirschm. Stereo Processing by Semiglobal Matching and Mutual Information[J]. IEEE Transactions on Pattern Analysis and Machine Intelligence, 2007, 30(2):328-341.<br>[3]blog.csdn.net/dulingwen/article/details/104142149<br>[4]blog.csdn.net/weixin_45617915/article/details/105763749</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/class-report/">class report</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/01/10/eigenface/">
+                        <span class="hidden-mobile">eigenface方法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+  <div class="col-lg-7 mx-auto nopadding-x-md">
+    <div class="container custom post-custom mx-auto">
+      <img src="/img/alipay.png" class="rounded mx-auto d-block mt-5" style="width:150px; height:150px;">scan the code if you would like to and I will thank you for inviting me for a Starbucks Coffee
+    </div>
+  </div>
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,514 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/head.png">
+  <link rel="icon" href="/img/head.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2e8b57">
+  
+    <meta name="description" content="">
+  
+  <meta name="author" content="David Pan">
+  <meta name="keywords" content="">
+  
+  <title>感知机算法 - David-ustc&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"david-ustc.github.io","root":"/","version":"1.8.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":false,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>David Pan's blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/background.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="感知机算法">
+              
+                感知机算法
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-10-20 19:05" pubdate>
+        2020年10月20日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      3
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">感知机算法</h1>
+            
+            <div class="markdown-body">
+              <h2 id="感知机算法求线性分界面———《模式识别导论》实验报告一"><a href="#感知机算法求线性分界面———《模式识别导论》实验报告一" class="headerlink" title="感知机算法求线性分界面———《模式识别导论》实验报告一"></a>感知机算法求线性分界面———《模式识别导论》实验报告一</h2><h4 id="实验题目"><a href="#实验题目" class="headerlink" title="实验题目"></a>实验题目</h4><ol>
+<li>已知二维模式样本集$X_1={(1,0),(1,1),(0,2)}$,$X_2={(2,1),(2,2),(1,3)}$,用感知机算法固定增量求分界面方程，并且作图；</li>
+<li>分别改变初始权向量和样本集中的顺序来获得不同结果；  </li>
+<li>（选做）自定义线性不可分样本，通过限定算法迭代次数得到结果并分析。</li>
+</ol>
+<h4 id="实验目的"><a href="#实验目的" class="headerlink" title="实验目的"></a>实验目的</h4><ol>
+<li>学习线性可分问题以及感知机算法</li>
+<li>熟悉<strong>numpy</strong>等包工具，掌握科学绘图</li>
+<li>线性不可分问题的分析与处理</li>
+</ol>
+<h4 id="实验原理"><a href="#实验原理" class="headerlink" title="实验原理"></a>实验原理</h4><p>对于两类（$\omega_i, \omega_j$）线性分类问题，给定一个D维样本$\chi = [\boldsymbol x_1,\boldsymbol x_2,…\boldsymbol x_n]^T$，我们用<br>$$\hat y = sgn(\boldsymbol w^T \boldsymbol x_k)\qquad  k=1,2,…n$$<br>上式已转化为增广形式，即$\boldsymbol x = [x_1,x_2,…x_D,1]^T，\hat y = sgn(g(\boldsymbol x))$</p>
+<p>$$ g(\boldsymbol{x, w}) = w_1x_1+w_2x_2+…+w_Dx_D+b = \boldsymbol w^T \boldsymbol x$$</p>
+<p>对于(g&gt;0 ，\hat y=1)，认为(x \in \omega_i);(g&lt;0 ， \hat y= -1)，认为(x \in \omega_j)。同理，我们用这种规则来标注样本，作为标签值$y^{(k)}$。<br>作为判别函数，几何上$ w $可表示为一个多维空间中的（超）平面的法向量，这个平面称为分界面。<br>如何得到一个好的$ g(\boldsymbol x) = w^T \boldsymbol x$，实验采用感知机算法，描述如下：</p>
+<ol>
+<li>迭代数<code>epochs</code>=0, 赋$w$初值。</li>
+<li>输入$\boldsymbol x_k$。</li>
+<li>计算函数值$g(\boldsymbol x_k)$。</li>
+<li>修正权向量$w_k$，<code>epochs</code>表示迭代代数。<br>运用以下算法，计算$\boldsymbol w_k^Tx^{(k)}$和$y^{(k)}$是否异号来进行迭代决策，无需改变样本集$\omega_j$中的$\hat y$。<br /><br>if $\boldsymbol w_k^T(y^{(k)}\boldsymbol x^{(k)})\leq0$ then<br>$\boldsymbol w = \boldsymbol w + c*y^{(k)}\boldsymbol x^{(k)}$<br>其中$c$为学习率，取0,1之间的值。</li>
+<li><code>epochs</code>+1，进入下一轮迭代。直到w对所有训练样本均稳定不变，程序结束。</li>
+</ol>
+<h4 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h4><ol>
+<li>本实验通过<strong>numpy</strong>科学包处理。<br>超参数取$c = 1$。$w$已经采用增广形式，并且在numpy的矩阵表示中，一维向量认为是行向量。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">features = np.array([[<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">1</span>]])<br>labels = np.array([<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>]).reshape(<span class="hljs-number">6</span>,<span class="hljs-number">1</span>)<br>w = np.array([<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>]) <br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>利用<strong>pandas</strong>包对矩阵进行行重排，随机排列$\chi$内样本点，以得到不同的样本集及结果。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">featuresT = features.transpose()<br>print(featuresT)<br>print(np.array(pd.DataFrame(featuresT).reindex(columns=[<span class="hljs-number">2</span>,<span class="hljs-number">0</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">1</span>,<span class="hljs-number">3</span>]))) <span class="hljs-comment">#需手动指定重排顺序</span><br>features = featuresT.transpose()<br></code></pre></td></tr></table></figure>
+<ol start="3">
+<li>开始训练，采用如上所述修正$w$算法。<br>检测$w$何时对所有样本收敛，停止迭代。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 在一轮循环前</span><br>v = np.array(w)<br><span class="hljs-comment"># 开始一轮</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_examples)：<br>        ……<br>u = (v == w)<br><span class="hljs-keyword">if</span>(u.<span class="hljs-built_in">all</span>() == <span class="hljs-literal">True</span>):<br>        <span class="hljs-keyword">break</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h4><ol>
+<li><p>调整样本点顺序，对最终结果无影响，但是改变$w$初始向量值会导致结果不同。<br>初始$\boldsymbol w=(1,1,1)$ $\boldsymbol w_1 = (-4,-2,8)$<br>初始$\boldsymbol w=(1,2,1)$ $\boldsymbol w_2 = (-4,-2,8)$<br>初始$\boldsymbol w=(-5,-4,1)$ $\boldsymbol w_3 = (-3,-1,5)$<br>初始$\boldsymbol w=(0,2,1)$ $\boldsymbol w_4 = (-3,-1,5)$<br>初始$\boldsymbol w=(-10,-10,1)$ $\boldsymbol w_1 = (-4,-2,9)$  </p>
+</li>
+<li><p>画图调用<strong>matplotlib</strong>包<br>$\boldsymbol w = (1,1,1)$，<code>epochs</code>=15轮后权向量收敛，<br>分界面$w_0 x + w_1 y + w_2 z = 0$，由于$z = 1$<br>分界面在平面上的投影为$y = - w_0x /w_1 - w_2/w_1$<br>结果如下所示：蓝色点代表样本集，绿色直线即为投影。<br><img src="/img/mlp/figure_1.png" alt="figure_1" title="plot w=[1,1,1]"></p>
+</li>
+</ol>
+<h4 id="选做实验"><a href="#选做实验" class="headerlink" title="选做实验"></a>选做实验</h4><p>1.<strong>不可分样本问题</strong><br>自定义线性不可分样本$\chi _1={(1,0),(0,2)}$,$X_2={(0,0),(3,1)}$,用感知机算法求分界面方程。</p>
+<p>2.<strong>处理方法</strong><br>设置<code>max_epochs = 500</code>，一轮循环过后，如果达到最大迭代数，结束程序。</p>
+<p>3.<strong>计算结果</strong><br>初始$\boldsymbol w=(1,1,1) \qquad \boldsymbol epochs =501\qquad w_1 = (-3,1,-2)$<br>初始$\boldsymbol w=(4,-2,1) \qquad \boldsymbol epochs =501\qquad w_1 = (-1,2,-1)$<br>可以得出结论，线性不可分样本，算法不能收敛到某一个分界面，如果不设置轮数限制，会无止境的计算下去。为此，通常情况应该设置一个足够大的<code>max_epochs</code>，以防止陷入死循环。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/class-report/">class report</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/01/10/eigenface/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">eigenface方法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/08/16/out%20of%20control/">
+                        <span class="hidden-mobile">《失控》读后感</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+  <div class="col-lg-7 mx-auto nopadding-x-md">
+    <div class="container custom post-custom mx-auto">
+      <img src="/img/alipay.png" class="rounded mx-auto d-block mt-5" style="width:150px; height:150px;">scan the code if you would like to and I will thank you for inviting me for a Starbucks Coffee
+    </div>
+  </div>
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
