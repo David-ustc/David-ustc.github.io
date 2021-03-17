@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=&#34;light&#34;>
 
 
 
@@ -13,7 +13,7 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="theme-color" content="#2e8b57">
+  <meta name="theme-color" content="#CDC0B0">
   
     <meta name="description" content="">
   
@@ -58,7 +58,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"david-ustc.github.io","root":"/","version":"1.8.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":false,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+    var CONFIG = {"hostname":"david-ustc.github.io","root":"/","version":"1.8.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":false,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -167,8 +167,6 @@
           <div class="page-header text-center fade-in-up">
             <span class="h2" id="subtitle" title="双目立体视觉">
               
-                双目立体视觉
-              
             </span>
 
             
@@ -232,7 +230,9 @@
             <h1 style="display: none">双目立体视觉</h1>
             
             <div class="markdown-body">
-              <h2 id="双目立体视觉———《人工智能导论之computer-vision》实验报告"><a href="#双目立体视觉———《人工智能导论之computer-vision》实验报告" class="headerlink" title="双目立体视觉———《人工智能导论之computer vision》实验报告"></a>双目立体视觉———《人工智能导论之computer vision》实验报告</h2><h4 id="实验题目"><a href="#实验题目" class="headerlink" title="实验题目"></a>实验题目</h4><p>在middlebury数据集上实现双目立体视觉图像重建<br><img src="/img/stereo/exp_stereo.png" width = "380" style="align:center;" /></p>
+              <h3 id="双目立体视觉———《人工智能导论之computer-vision》实验报告"><a href="#双目立体视觉———《人工智能导论之computer-vision》实验报告" class="headerlink" title="双目立体视觉———《人工智能导论之computer vision》实验报告"></a>双目立体视觉———《人工智能导论之computer vision》实验报告</h3><img src="/img/stereo/exp_stereo.png" width = "380" style="align:center;" />
+
+<h4 id="实验题目"><a href="#实验题目" class="headerlink" title="实验题目"></a>实验题目</h4><p>在middlebury数据集上实现双目立体视觉图像重建</p>
 <h4 id="实验目的"><a href="#实验目的" class="headerlink" title="实验目的"></a>实验目的</h4><ol>
 <li><strong>了解计算机视觉基本知识。</strong></li>
 <li><strong>学习计算机数字图像处理基本概念。</strong></li>
@@ -255,18 +255,50 @@
 <ol start="5">
 <li><p><strong>匹配像素算法———归一化互相关(NCC:Normalized cross-correlation)</strong><br>在立体重建算法中，我们将对于每个像素尝试不同的偏移，并按照局部图像周围归一化的互相关值，选择具有最佳评估结果的视差。因为每个偏移在某种程度上对应于一个平面，所以该过程有时称为扫平面法。<br>如有校正过的两帧图像，NCC算法对图像$I_1$一个待匹配像素构建$n*n$匹配窗口，在图像$I_2$极线上对每一个像素构建匹配窗口与待匹配像素匹配窗口计算相关性，相关性最高的视为最优匹配。由于NCC匹配流程是通过在同一行查找最优匹配，因此可以并行处理，对于运行效率有一定的提升。<br>我们使用每个像素周围的图像块（根本上说，是局部周边图像）来计算归一化的互相关。针对图像周围像素NCC公式：<br>$$ncc(I_1, I_2) =\frac{\sum_{x}(I_1(x) -\mu_1)(I_2(x)- \mu_2)}{\sqrt{\sum_{x}(I_1(x) -\mu_1)^2 \sum_{x}(I_2(x)- \mu_2)^2}}$$</p>
 </li>
-<li><p><strong>匹配像素算法————SGBM算法</strong><br>(1).预处理<br>SGBM采用水平<code>Sobel</code>算子，把图像做处理，公式为：<br>$Sobel ,(x,y)=2[P(x+1,y)-P(x-1,y)]+ P(x+1,y-1)-P(x-1,y-1)+ P(x+1,y+1)-P(x-1,y+1)$<br>用一个函数将经过水平<code>Sobel</code>算子处理后的图像上每个像素点（P表示其像素值）映射成一个新的图像：<code>P_new</code>表示新图像上的像素值，<code>prefiltercap</code>作为传递参数可定义。<br>$$P_{new} =<br>   \begin{cases}</p>
-<pre><code>\qquad\qquad 0 \qquad\qquad p &lt;\text&#123;-prefiltercap&#125;;\\
+<li><p><strong>匹配像素算法————SGBM算法</strong><br>(1).预处理<br>SGBM采用水平<code>Sobel</code>算子，把图像做处理，公式为：<br>$$Sobel (x,y)=2[P(x+1,y)-P(x-1,y)]+ P(x+1,y-1)-P(x-1,y-1)+ P(x+1,y+1)-P(x-1,y+1)$$<br>用一个函数将经过水平<code>Sobel</code>算子处理后的图像上每个像素点（P表示其像素值）映射成一个新的图像：<code>P_new</code>表示新图像上的像素值，<code>prefiltercap</code>作为传递参数可定义。<br>$$P_{new} = \begin{cases}</p>
+<div class="hljs code-wrapper"><pre><code>\qquad\qquad 0 \qquad\qquad p &lt;\text&#123;-prefiltercap&#125;;\\
 p+prefiltercap \qquad \text&#123;-prefiltercap&#125;\leq p \leq \text&#123;-prefiltercap&#125;;\\
  2*prefiltercap,\quad\quad p &gt;\text&#123;-prefiltercap&#125;.
 \end&#123;cases&#125;
-</code></pre>
-<p>$$<br>预处理实际上是得到图像的梯度信息,经预处理的图像保存起来，将会用于计算代价。<br>(2).代价计算<br>大部分匹配算法中就是在校正图像上的每一行，寻找一条使得全局能量函数最小的最优匹配路径。在论文中，作者提出了一个具体的能量函数：$$L(D) = \sum_p [C(p,D_p) +\sum_{q\in N_p}p_1\cdot I(|D_p -D_q|=1)+\sum_{q\in N_p}p_2 I(|D_p -D_q|&gt;1)$$<br>opencv中两个参数P1，P2是这样设定的：<br><code>P1 =8*cn*sgbm.SADWindowSize*sgbm.SADWindowSize</code>;<br><code>P2 = 32*cn*sgbm.SADWindowSize*sgbm.SADWindowSize</code>。<br>Np 指像素p的相邻像素点；C(p, Dp)指当前像素点<code>disparity</code>为Dp时的<code>cost</code>函数值，<strong>可以为BT代价或者MI代价等</strong>，<code>SGBM</code>中能量函数一般定义为C(original)和C(smooth)之和，其中 C(data)为图像数据项用于判断匹配像素点之间的相似性，C(smooth)为<code>sobel</code>预处理之后像素点与邻域像素的平滑约束项，用于保证视差的连续性；<br>P1 是一个惩罚系数，它适用于像素p相邻像素中<code>disparity</code>值与p的<code>disparity</code>值相差1的那些像素；P2 是一个惩罚系数，它适用于像素p相邻像素中<code>disparity</code>值与p的<code>disparity</code>值相差大于1的那些像素；$I[]$示性函数如果函数中的参数为真返回1，否则返回0。<br>按照上述过程，只要依次求解每个阶段的最优值$min L_k()$，该行像素的视差也就求出来了。从这个过程中可以发现，该计算流程实际上就是接下来所要讲解的<code>SGM</code>在水平方向上的聚合。<br>(3).代价聚合和动态规划<br>动态规划即在水平扫描线的视差空间切面上寻找最优路径，如下图所示，以像素点的行方向为横坐标，视差值d 为纵坐标，依次将整个过程分为 1、2、3、…、k 共k个阶段。将上述各个阶段所处的匹配阶段用不同的状态表示。如下图所示，每一个阶段的状态就是对应像素点的匹配情况，共有三种状态：相互匹配记为 M、左可见右遮挡为 L、右可见左遮挡为 R，状态的选择满足无后效性。<img src="/img/stereo/exp_DP.png" width = "380" height="234"  style="align:center;" /><br>针对该思想，Hirschmuller提出了semi-global matching方法，通过在多个方向1维路径上平等地进行代价聚合，然后使用WTA求解视差，来作为一个近似求解2维能量最小化的过程。<strong>此时能量（损失）函数化简成：</strong><br>$$ L(r,d) = C(\bold{p},d) +min(L_r(\bold{p-r},d),L_r(\bold{p-r},d-1)+P_1,L_r(\bold{p-r},d+1)+P_1,min_iL_r(\bold{p-r},i)+P_2)-min_kL_r(\bold{p-r},k)$$<br>代价聚合的路径可以为8或16个，这样可以全面覆盖整张图像，最终的聚合代价是所有路径上聚合代价的和：$S(\bold{p},d) = \sum_r L_r(\bold{r},d)$<br>(4).视差计算<br>经过代价聚合后，根据<code>winner takes all</code>的思想，取最大值$d^* = argmin S(\bold{p},d)$得到视差图，即可进一步得到深度图。<br>(5).后处理<code>proprocessing</code>，这里只选取两步骤简要介绍。<br>A.唯一性检测<br>采用比率测试匹配筛选方法，即最低代价是次低代价的<code>(1+ uniquenessRatio/100)</code>倍的时候时，最低代价匹配的视差值才认为是正确视差值，否则这个像素点的视差值设定为负值。其中<code>uniquenessRatio</code>是一个常数参数，一般设置为0.8左右。<br>B.左右一致性检测<br> 设左图中像素p的视差为d，右图中对应像素的视差为d<em>，那么一般认为时，$|d-d^</em>|&lt;threshold$才最有可能为正确的视差，否则将其置为一个无效值。threshold一般取为1或者2。函数<code>cv2.stereoSGBM_create()</code>代码中已经介绍过该参数。</p>
+</code></pre></div>
+<p>$$<br>预处理实际上是得到图像的梯度信息,经预处理的图像保存起来，将会用于计算代价。</p>
 </li>
 </ol>
+<p>(2).代价计算<br>大部分匹配算法中就是在校正图像上的每一行，寻找一条使得全局能量函数最小的最优匹配路径。在论文中，作者提出了一个具体的能量函数：<br>$$L(D) = \sum_p [C(p,D_p) +\sum_{q\in N_p}p_1\cdot I(|D_p -D_q|=1)+\sum_{q\in N_p}p_2 I(|D_p -D_q|&gt;1)$$<br>opencv中两个参数P1，P2是这样设定的：<br><code>P1 =8*cn*sgbm.SADWindowSize*sgbm.SADWindowSize</code>;<br><code>P2 = 32*cn*sgbm.SADWindowSize*sgbm.SADWindowSize</code>。<br>Np 指像素p的相邻像素点；C(p, Dp)指当前像素点<code>disparity</code>为Dp时的<code>cost</code>函数值，<strong>可以为BT代价或者MI代价等</strong>，<code>SGBM</code>中能量函数一般定义为C(original)和C(smooth)之和，其中 C(data)为图像数据项用于判断匹配像素点之间的相似性，C(smooth)为<code>sobel</code>预处理之后像素点与邻域像素的平滑约束项，用于保证视差的连续性；<br>P1 是一个惩罚系数，它适用于像素p相邻像素中<code>disparity</code>值与p的<code>disparity</code>值相差1的那些像素；P2 是一个惩罚系数，它适用于像素p相邻像素中<code>disparity</code>值与p的<code>disparity</code>值相差大于1的那些像素；$I[]$示性函数如果函数中的参数为真返回1，否则返回0。<br>按照上述过程，只要依次求解每个阶段的最优值$min L_k()$，该行像素的视差也就求出来了。从这个过程中可以发现，该计算流程实际上就是接下来所要讲解的<code>SGM</code>在水平方向上的聚合。<br>(3).代价聚合和动态规划<br>动态规划即在水平扫描线的视差空间切面上寻找最优路径，如下图所示，以像素点的行方向为横坐标，视差值d 为纵坐标，依次将整个过程分为 1、2、3、…、k 共k个阶段。将上述各个阶段所处的匹配阶段用不同的状态表示。如下图所示，每一个阶段的状态就是对应像素点的匹配情况，共有三种状态：相互匹配记为 M、左可见右遮挡为 L、右可见左遮挡为 R，状态的选择满足无后效性。<img src="/img/stereo/exp_DP.png" width = "380" height="234"  style="align:center;" /><br>针对该思想，Hirschmuller提出了semi-global matching方法，通过在多个方向1维路径上平等地进行代价聚合，然后使用WTA求解视差，来作为一个近似求解2维能量最小化的过程。<strong>此时能量（损失）函数化简成：</strong><br>$$ L(r,d) = C(\bold{p},d) +min(L_r(\bold{p-r},d),L_r(\bold{p-r},d-1)+P_1,L_r(\bold{p-r},d+1)+P_1,min_iL_r(\bold{p-r},i)+P_2)-min_kL_r(\bold{p-r},k)$$<br>代价聚合的路径可以为8或16个，这样可以全面覆盖整张图像，最终的聚合代价是所有路径上聚合代价的和：$S(\bold{p},d) = \sum_r L_r(\bold{r},d)$<br>(4).视差计算<br>经过代价聚合后，根据<code>winner takes all</code>的思想，取最大值$d^* = argmin S(\bold{p},d)$得到视差图，即可进一步得到深度图。<br>(5).后处理<code>proprocessing</code>，这里只选取两步骤简要介绍。<br>A.唯一性检测<br>采用比率测试匹配筛选方法，即最低代价是次低代价的<code>(1+ uniquenessRatio/100)</code>倍的时候时，最低代价匹配的视差值才认为是正确视差值，否则这个像素点的视差值设定为负值。其中<code>uniquenessRatio</code>是一个常数参数，一般设置为0.8左右。<br>B.左右一致性检测<br> 设左图中像素p的视差为d，右图中对应像素的视差为d<em>，那么一般认为时，$|d-d^</em>|&lt;threshold$才最有可能为正确的视差，否则将其置为一个无效值。threshold一般取为1或者2。函数<code>cv2.stereoSGBM_create()</code>代码中已经介绍过该参数。</p>
 <h4 id="算法结构"><a href="#算法结构" class="headerlink" title="算法结构"></a>算法结构</h4><ol>
-<li>ncc算法有两种处理方法，分别是采用平均滤波器和高斯滤波器计算归一化互相关系数ncc。两者除了<code>filter</code>不同，在算法上无差异，流程如下：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs sql">def plane_sweep_ncc(im_l,im_r,<span class="hljs-keyword">start</span>,steps,wid):<br>    mean_l <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(im_l)<br>    mean_r <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(im_r)<br>    norm_l <span class="hljs-operator">=</span> im_l <span class="hljs-operator">-</span> mean_l<br>    norm_r <span class="hljs-operator">=</span> im_r <span class="hljs-operator">-</span> mean_r<br>    <span class="hljs-keyword">for</span> displ <span class="hljs-keyword">in</span> <span class="hljs-keyword">range</span>(steps):<br>        s <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(norm_l.roll(<span class="hljs-operator">-</span>displ <span class="hljs-operator">-</span> <span class="hljs-keyword">start</span>) <span class="hljs-operator">*</span> norm_r)  <br>        s_l <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(norm_l.roll(<span class="hljs-operator">-</span>displ <span class="hljs-operator">-</span> <span class="hljs-keyword">start</span>) <span class="hljs-operator">*</span> norm_l.roll(<span class="hljs-operator">-</span>displ <span class="hljs-operator">-</span> <span class="hljs-keyword">start</span>))<br>        s_r <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(norm_r <span class="hljs-operator">*</span> norm_r) <br>        dmaps[:, :, displ] <span class="hljs-operator">=</span> s <span class="hljs-operator">/</span> <span class="hljs-built_in">sqrt</span>((s_l <span class="hljs-operator">*</span> s_r)<span class="hljs-operator">+</span><span class="hljs-number">1e-5</span>)<br>    #选取最佳深度<br>    <span class="hljs-keyword">return</span> disparity <span class="hljs-operator">=</span> dmaps.argmax(, axis<span class="hljs-operator">=</span><span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure></li>
-<li>Python语言程序包opencv（cv2）有与C++的接口，内部定义了SGBM对象，可直接操作。<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs routeros">import cv2<br>stereo = cv2.StereoSGBM_create(<br>    #最小视差，默认为0。此参数决定左图中的像素点在右图匹配搜索的起点。<br>    <span class="hljs-attribute">minDisparity</span>=0,<br>    <span class="hljs-attribute">numDisparities</span>=256,  # max_disp has <span class="hljs-keyword">to</span> be dividable by 16 f. E. HH 192, 256<br>    <span class="hljs-attribute">blockSize</span>=3,<br>    #控制视差变化平滑性的参数。P1越大，视差越平滑，P2越大，边缘越差。windowsize默认3; 5; 7 ; 本实验设置为3<br>    <span class="hljs-attribute">P1</span>=8 * 3 * window_size ** 2,<br>    <span class="hljs-attribute">P2</span>=32 * 3 * window_size ** 2,<br>    #一致性<br>    <span class="hljs-attribute">disp12MaxDiff</span>=1,<br>    #唯一性<br>    <span class="hljs-attribute">uniquenessRatio</span>=15,<br>    #视差连通区域像素点个数的大小。对于每一个视差点，当其连通区域的像素点个数小于size时，认为该视差值无效，是噪点。<br>    <span class="hljs-attribute">speckleWindowSize</span>=0,<br>    <span class="hljs-attribute">speckleRange</span>=2,<br>    #水平sobel预处理后，映射滤波器大小。默认为15<br>    <span class="hljs-attribute">preFilterCap</span>=63,<br>    <span class="hljs-attribute">mode</span>=cv2.STEREO_SGBM_MODE_SGBM_3WAY<br>)<br>    disparity = stereo.compute(img_left, img_right).astype(np.float32)<br></code></pre></td></tr></table></figure></li>
+<li>ncc算法有两种处理方法，分别是采用平均滤波器和高斯滤波器计算归一化互相关系数ncc。两者除了<code>filter</code>不同，在算法上无差异，流程如下：<div class="hljs code-wrapper"><pre><code class="hljs sql">def plane_sweep_ncc(im_l,im_r,<span class="hljs-keyword">start</span>,steps,wid):
+    mean_l <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(im_l)
+    mean_r <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(im_r)
+    norm_l <span class="hljs-operator">=</span> im_l <span class="hljs-operator">-</span> mean_l
+    norm_r <span class="hljs-operator">=</span> im_r <span class="hljs-operator">-</span> mean_r
+    <span class="hljs-keyword">for</span> displ <span class="hljs-keyword">in</span> <span class="hljs-keyword">range</span>(steps):
+        s <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(norm_l.roll(<span class="hljs-operator">-</span>displ <span class="hljs-operator">-</span> <span class="hljs-keyword">start</span>) <span class="hljs-operator">*</span> norm_r)  
+        s_l <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(norm_l.roll(<span class="hljs-operator">-</span>displ <span class="hljs-operator">-</span> <span class="hljs-keyword">start</span>) <span class="hljs-operator">*</span> norm_l.roll(<span class="hljs-operator">-</span>displ <span class="hljs-operator">-</span> <span class="hljs-keyword">start</span>))
+        s_r <span class="hljs-operator">=</span> <span class="hljs-keyword">filter</span>(norm_r <span class="hljs-operator">*</span> norm_r) 
+        dmaps[:, :, displ] <span class="hljs-operator">=</span> s <span class="hljs-operator">/</span> <span class="hljs-built_in">sqrt</span>((s_l <span class="hljs-operator">*</span> s_r)<span class="hljs-operator">+</span><span class="hljs-number">1e-5</span>)
+    #选取最佳深度
+    <span class="hljs-keyword">return</span> disparity <span class="hljs-operator">=</span> dmaps.argmax(, axis<span class="hljs-operator">=</span><span class="hljs-number">2</span>)</code></pre></div></li>
+<li>Python语言程序包opencv（cv2）有与C++的接口，内部定义了SGBM对象，可直接操作。<div class="hljs code-wrapper"><pre><code class="hljs routeros">import cv2
+stereo = cv2.StereoSGBM_create(
+    #最小视差，默认为0。此参数决定左图中的像素点在右图匹配搜索的起点。
+    <span class="hljs-attribute">minDisparity</span>=0,
+    <span class="hljs-attribute">numDisparities</span>=256,  # max_disp has <span class="hljs-keyword">to</span> be dividable by 16 f. E. HH 192, 256
+    <span class="hljs-attribute">blockSize</span>=3,
+    #控制视差变化平滑性的参数。P1越大，视差越平滑，P2越大，边缘越差。windowsize默认3; 5; 7 ; 本实验设置为3
+    <span class="hljs-attribute">P1</span>=8 * 3 * window_size ** 2,
+    <span class="hljs-attribute">P2</span>=32 * 3 * window_size ** 2,
+    #一致性
+    <span class="hljs-attribute">disp12MaxDiff</span>=1,
+    #唯一性
+    <span class="hljs-attribute">uniquenessRatio</span>=15,
+    #视差连通区域像素点个数的大小。对于每一个视差点，当其连通区域的像素点个数小于size时，认为该视差值无效，是噪点。
+    <span class="hljs-attribute">speckleWindowSize</span>=0,
+    <span class="hljs-attribute">speckleRange</span>=2,
+    #水平sobel预处理后，映射滤波器大小。默认为15
+    <span class="hljs-attribute">preFilterCap</span>=63,
+    <span class="hljs-attribute">mode</span>=cv2.STEREO_SGBM_MODE_SGBM_3WAY
+)
+    disparity = stereo.compute(img_left, img_right).astype(np.float32)</code></pre></div></li>
 </ol>
 <h4 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h4><ol>
 <li><p><code>middlebury</code>数据集提供了真实视差图图pfm文件，通过文件IO操作将字节序稍作变换，即可得到png图片。视差图作为数组读入后，运用一步公式和<code>calib.txt</code>标定文件参数，计算可得深度图。本小节全部以<code>Umbrella-perfect</code>为分析对象，视差图和深度图真值如下：</p>
@@ -313,6 +345,12 @@ p+prefiltercap \qquad \text&#123;-prefiltercap&#125;\leq p \leq \text&#123;-pref
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/03/17/artificial-fool-md/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">artificial fool.md</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
@@ -448,6 +486,17 @@ p+prefiltercap \qquad \text&#123;-prefiltercap&#125;\leq p \leq \text&#123;-pref
 
 
 
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
 
 
 
