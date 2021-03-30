@@ -240,7 +240,7 @@
 <li>熟悉<strong>numpy</strong>等包工具，掌握科学绘图</li>
 <li>线性不可分问题的分析与处理</li>
 </ol>
-<h4 id="实验原理"><a href="#实验原理" class="headerlink" title="实验原理"></a>实验原理</h4><p>对于两类（$\omega_i, \omega_j$）线性分类问题，给定一个D维样本$\chi = [\boldsymbol x_1,\boldsymbol x_2,…\boldsymbol x_n]^T$，我们用<br>$$\hat y = sgn(\boldsymbol w^T \boldsymbol x_k)\qquad  k=1,2,…n$$<br>上式已转化为增广形式，即$\boldsymbol x = [x_1,x_2,…x_D,1]^T，\hat y = sgn(g(\boldsymbol x))$</p>
+<h4 id="实验原理"><a href="#实验原理" class="headerlink" title="实验原理"></a>实验原理</h4><p>对于两类（$\omega_i, \omega_j$）线性分类问题，给定一个D维样本$\chi = [\boldsymbol{x_1},\boldsymbol x_2,…\boldsymbol x_n]^T$，我们用<br>$$\hat y = sgn(\boldsymbol w^T \boldsymbol x_k)\qquad  k=1,2,…n$$<br>上式已转化为增广形式，即$\boldsymbol x = [x_1,x_2,…x_D,1]^T，\hat y = sgn(g(\boldsymbol x))$</p>
 <p>$$ g(\boldsymbol{x, w}) = w_1x_1+w_2x_2+…+w_Dx_D+b = \boldsymbol w^T \boldsymbol x$$</p>
 <p>对于(g&gt;0 ，\hat y=1)，认为(x \in \omega_i);(g&lt;0 ， \hat y= -1)，认为(x \in \omega_j)。同理，我们用这种规则来标注样本，作为标签值$y^{(k)}$。<br>作为判别函数，几何上$ w $可表示为一个多维空间中的（超）平面的法向量，这个平面称为分界面。<br>如何得到一个好的$ g(\boldsymbol x) = w^T \boldsymbol x$，实验采用感知机算法，描述如下：</p>
 <ol>
@@ -253,21 +253,33 @@
 <h4 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h4><ol>
 <li>本实验通过<strong>numpy</strong>科学包处理。<br>超参数取$c = 1$。$w$已经采用增广形式，并且在numpy的矩阵表示中，一维向量认为是行向量。</li>
 </ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">features = np.array([[<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">1</span>]])<br>labels = np.array([<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>]).reshape(<span class="hljs-number">6</span>,<span class="hljs-number">1</span>)<br>w = np.array([<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>]) <br></code></pre></td></tr></table></figure>
+<div class="hljs code-wrapper"><pre><code class="hljs python">features = np.array([[<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">1</span>]])
+labels = np.array([<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>]).reshape(<span class="hljs-number">6</span>,<span class="hljs-number">1</span>)
+w = np.array([<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>])</code></pre></div>
 
 <ol start="2">
 <li>利用<strong>pandas</strong>包对矩阵进行行重排，随机排列$\chi$内样本点，以得到不同的样本集及结果。</li>
 </ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">featuresT = features.transpose()<br>print(featuresT)<br>print(np.array(pd.DataFrame(featuresT).reindex(columns=[<span class="hljs-number">2</span>,<span class="hljs-number">0</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">1</span>,<span class="hljs-number">3</span>]))) <span class="hljs-comment">#需手动指定重排顺序</span><br>features = featuresT.transpose()<br></code></pre></td></tr></table></figure>
+<div class="hljs code-wrapper"><pre><code class="hljs python">featuresT = features.transpose()
+print(featuresT)
+print(np.array(pd.DataFrame(featuresT).reindex(columns=[<span class="hljs-number">2</span>,<span class="hljs-number">0</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">1</span>,<span class="hljs-number">3</span>]))) <span class="hljs-comment">#需手动指定重排顺序</span>
+features = featuresT.transpose()</code></pre></div>
 <ol start="3">
 <li>开始训练，采用如上所述修正$w$算法。<br>检测$w$何时对所有样本收敛，停止迭代。</li>
 </ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 在一轮循环前</span><br>v = np.array(w)<br><span class="hljs-comment"># 开始一轮</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_examples)：<br>        ……<br>u = (v == w)<br><span class="hljs-keyword">if</span>(u.<span class="hljs-built_in">all</span>() == <span class="hljs-literal">True</span>):<br>        <span class="hljs-keyword">break</span><br></code></pre></td></tr></table></figure>
+<div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-comment"># 在一轮循环前</span>
+v = np.array(w)
+<span class="hljs-comment"># 开始一轮</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(num_examples)：
+        ……
+u = (v == w)
+<span class="hljs-keyword">if</span>(u.<span class="hljs-built_in">all</span>() == <span class="hljs-literal">True</span>):
+        <span class="hljs-keyword">break</span></code></pre></div>
 
 <h4 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h4><ol>
 <li><p>调整样本点顺序，对最终结果无影响，但是改变$w$初始向量值会导致结果不同。<br>初始$\boldsymbol w=(1,1,1)$ $\boldsymbol w_1 = (-4,-2,8)$<br>初始$\boldsymbol w=(1,2,1)$ $\boldsymbol w_2 = (-4,-2,8)$<br>初始$\boldsymbol w=(-5,-4,1)$ $\boldsymbol w_3 = (-3,-1,5)$<br>初始$\boldsymbol w=(0,2,1)$ $\boldsymbol w_4 = (-3,-1,5)$<br>初始$\boldsymbol w=(-10,-10,1)$ $\boldsymbol w_1 = (-4,-2,9)$  </p>
 </li>
-<li><p>画图调用<strong>matplotlib</strong>包<br>$\boldsymbol w = (1,1,1)$，<code>epochs</code>=15轮后权向量收敛，<br>分界面$w_0 x + w_1 y + w_2 z = 0$，由于$z = 1$<br>分界面在平面上的投影为$y = - w_0x /w_1 - w_2/w_1$<br>结果如下所示：蓝色点代表样本集，绿色直线即为投影。<br><img src="/img/mlp/figure_1.png" alt="figure_1" title="plot w=[1,1,1]"></p>
+<li><p>画图调用<strong>matplotlib</strong>包<br>$\boldsymbol w = (1,1,1)$，<code>epochs</code>=15轮后权向量收敛，<br>分界面$w_0 x + w_1 y + w_2 z = 0$，由于$z = 1$<br>分界面在平面上的投影为$y = - w_0x /w_1 - w_2/w_1$<br>结果如下所示：蓝色点代表样本集，绿色直线即为投影。<br><img src="/img/mlp/Figure_1.png" alt="figure_1" title="plot w=[1,1,1]"></p>
 </li>
 </ol>
 <h4 id="选做实验"><a href="#选做实验" class="headerlink" title="选做实验"></a>选做实验</h4><p>1.<strong>不可分样本问题</strong><br>自定义线性不可分样本$\chi _1={(1,0),(0,2)}$,$X_2={(0,0),(3,1)}$,用感知机算法求分界面方程。</p>
